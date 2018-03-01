@@ -1,9 +1,9 @@
-# sklearn-build-lambda
+# python-pkgs-build-lambda
 
-### Building scikit-learn for AWS Lambda
+### Building large python packages for AWS Lambda
 
 This repo contains a `build.sh` script that's intended to be run in an Amazon
-Linux docker container, and build scikit-learn, numpy, and scipy for use in AWS
+Linux docker container, and build numpy and scipy for use in AWS
 Lambda. For more info about how the script works, and how to use it, see my
 [blog post on deploying sklearn to Lambda](https://serverlesscode.com/post/scikitlearn-with-amazon-linux-container/).
 
@@ -17,17 +17,16 @@ To build the zipfile, pull the Amazon Linux image and run the build script in
 it.
 
 ```
-$ docker pull amazonlinux:2016.09
-$ docker run -v $(pwd):/outputs -it amazonlinux:2016.09 \
+$ docker pull amazonlinux:2017.09
+$ docker run -v $(pwd):/outputs -it amazonlinux:2017.09 \
       /bin/bash /outputs/build.sh
 ```
 
 That will make a file called `venv.zip` in the local directory that's around
-40MB.
+65 MB.
 
-Once you run this, you'll have a zipfile containing sklearn and its
-dependencies, to use them add your handler file to the zip, and add the `lib`
-directory so it can be used for shared libs. The minimum viable sklearn handler
+Once you run this, you'll have a zipfile containing scipy and numpy, to use them add your handler file to the zip, and add the `lib`
+directory so it can be used for shared libs. The minimum viable scipy handler
 would thus look like:
 
 ```
@@ -40,10 +39,10 @@ for d, _, files in os.walk('lib'):
             continue
         ctypes.cdll.LoadLibrary(os.path.join(d, f))
 
-import sklearn
+import scipy
 
 def handler(event, context):
-    # do sklearn stuff here
+    # do scipy stuff here
     return {'yay': 'done'}
 
 ```
@@ -52,12 +51,18 @@ def handler(event, context):
 
 To add extra packages to the build, create a `requirements.txt` file alongside
 the `build.sh` in this repo. All packages listed there will be installed in
-addition to `sklearn`, `numpy`, and related dependencies.
+addition to `scipy`, `numpy`, and related dependencies.
+
+## Changes Made
+
+This script was edited to allow us to import our private repos such as [amper-core](https://github.com/ampertech/amper-core). This repository must include `private_key.txt` file including a ssh private key, and here is info on how to [generate a ssh-key](https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/#generating-a-new-ssh-key) and how to [add it to you github profile](https://help.github.com/articles/adding-a-new-ssh-key-to-your-github-account/). The corresponding private_key should be placed in the private_key.txt file where it will be used by docker to access our private repo.
+
+Also the `build.sh` script was updated to use python 3.6 and install git so that we can install packages in requirements.txt.
 
 ## Sizing and Future Work
 
 With just compression and stripped binaries, the full sklearn stack weighs in
-at 39 MB, and could probably be reduced further by:
+at 65 MB, and could probably be reduced further by:
 
 1. Pre-compiling all .pyc files and deleting their source
 1. Removing test files
