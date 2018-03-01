@@ -1,0 +1,7 @@
+git+ssh://git@github.com/ampertech/amper-core.git@v0.0.14
+psycopg2
+pytz
+raven
+typing
+redis
+pandas
