@@ -3,8 +3,8 @@
 ### Building large python packages for AWS Lambda
 
 This repo contains a `build.sh` script that's intended to be run in an Amazon
-Linux docker container, and build numpy and scipy for use in AWS
-Lambda. For more info about how the script works, and how to use it, see my
+Linux docker container, and build numpy, pandas, and scipy for use in AWS
+Lambda. For more info about how the script works, and how to use it, see this
 [blog post on deploying sklearn to Lambda](https://serverlesscode.com/post/scikitlearn-with-amazon-linux-container/).
 
 There was an older version of this repo, now archived in the
@@ -17,15 +17,14 @@ To build the zipfile, pull the Amazon Linux image and run the build script in
 it.
 
 ```
-$ docker pull amazonlinux:2017.09
-$ docker run -v $(pwd):/outputs -it amazonlinux:2017.09 \
-      /bin/bash /outputs/build.sh
+$ docker pull amazonlinux:latest
+$ docker run -v $(pwd):/outputs -it amazonlinux:latest /bin/bash/outputs/build.sh
 ```
 
 That will make a file called `venv.zip` in the local directory that's around
-65 MB.
+67 MB.
 
-Once you run this, you'll have a zipfile containing scipy and numpy, to use them add your handler file to the zip, and add the `lib`
+Once you run this, you'll have a zipfile containing scipy, pandas, and numpy, to use them add your handler file to the zip, and add the `lib`
 directory so it can be used for shared libs. The minimum viable scipy handler
 would thus look like:
 
@@ -51,7 +50,7 @@ def handler(event, context):
 
 To add extra packages to the build, create a `requirements.txt` file alongside
 the `build.sh` in this repo. All packages listed there will be installed in
-addition to `scipy`, `numpy`, and related dependencies.
+addition to `scipy`, `pandas`, `numpy`, and related dependencies.
 
 ## Changes Made
 
