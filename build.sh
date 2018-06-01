@@ -27,7 +27,17 @@ strip_virtualenv () {
     echo "venv original size $(du -sh $VIRTUAL_ENV | cut -f1)"
     find $VIRTUAL_ENV/lib64/python3.6/site-packages/ -name "*.so" | xargs strip
     echo "venv stripped size $(du -sh $VIRTUAL_ENV | cut -f1)"
-
+    find $VIRTUAL_ENV/lib64/python3.6/site-packages/ -name "test" | xargs rm -rf
+    find $VIRTUAL_ENV/lib64/python3.6/site-packages/ -name "tests" | xargs rm -rf
+    echo "venv tests removed size $(du -sh $VIRTUAL_ENV | cut -f1)"
+    find $VIRTUAL_ENV/lib64/python3.6/site-packages/ -name "doc" | xargs rm -rf
+    find $VIRTUAL_ENV/lib64/python3.6/site-packages/ -name "docs" | xargs rm -rf
+    echo "venv docs removed size $(du -sh $VIRTUAL_ENV | cut -f1)"
+    # find $VIRTUAL_ENV/lib64/python3.6/site-packages/ -name "*.py" | xargs python -m py_compile
+    # find $VIRTUAL_ENV/lib64/python3.6/site-packages/ -name "*.py" | xargs rm -f
+    # echo "venv py files compiled size $(du -sh $VIRTUAL_ENV | cut -f1)"
+    find $VIRTUAL_ENV/lib64/python3.6/site-packages/ -name "*.json" | xargs rm -f
+    echo "json files removed size $(du -sh $VIRTUAL_ENV | cut -f1)"
     pushd $VIRTUAL_ENV/lib/python3.6/site-packages/ && zip -r -9 -q /tmp/partial-venv.zip * ; popd
     pushd $VIRTUAL_ENV/lib64/python3.6/site-packages/ && zip -r -9 --out /outputs/venv.zip -q /tmp/partial-venv.zip * ; popd
     echo "site-packages compressed size $(du -sh /outputs/venv.zip | cut -f1)"

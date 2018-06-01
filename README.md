@@ -18,7 +18,7 @@ it.
 
 ```
 $ docker pull amazonlinux:latest
-$ docker run -v $(pwd):/outputs -it amazonlinux:latest /bin/bash/outputs/build.sh
+$ docker run -v $(pwd):/outputs -it amazonlinux:latest  /bin/bash /outputs/build.sh
 ```
 
 That will make a file called `venv.zip` in the local directory that's around
@@ -64,14 +64,22 @@ With just compression and stripped binaries, the full sklearn stack weighs in
 at 65 MB, and could probably be reduced further by:
 
 1. Pre-compiling all .pyc files and deleting their source
-1. Removing test files
-1. Removing documentation
+2. Removing test files
+3. Removing documentation
 
 For my purposes, 39 MB is sufficiently small, if you have any improvements to
 share pull requests or issues are welcome.
+
+Completed optimizations 2 and 3 above by following this [link](https://gist.github.com/CarstVaartjes/77dbe8249d171e592bd17847f7009272#file-fb_prophet_chalice-py-L39). Tried optimization 1 but packages broke down.
 
 ## License
 
 This project is MIT Licensed, for license info on the numpy, scipy, and sklearn
 packages see their respective sites. Full text of the MIT license is in
 LICENSE.txt.
+
+## Created Deployment Packages
+
+1. **venv-3-1-18.zip** - package for state-gen lambda function in covfefe
+2. **venv-4-23-18.zip** - package for auto tuner (no longer used)
+3. **venv-5-32-18.zip** - package for cycles-gen lambda function in covfefe
