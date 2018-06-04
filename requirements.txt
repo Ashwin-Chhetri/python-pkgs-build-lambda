@@ -4,3 +4,4 @@ pytz
 raven
 redis
 statsmodels
+requests
