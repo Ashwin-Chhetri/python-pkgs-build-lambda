@@ -21,6 +21,7 @@ do_pip () {
     pip install --no-binary numpy numpy
     pip install --no-binary scipy scipy
     pip install --no-binary pandas pandas
+    pip install --no-binary scikit-learn scikit-learn
 }
 
 strip_virtualenv () {
