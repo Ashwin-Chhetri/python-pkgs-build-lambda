@@ -15,6 +15,9 @@ import logging
 import numpy as np
 import pandas as pd
 from statsmodels import api
+from sklearn.cluster import KMeans
+from sklearn.metrics import silhouette_score
+from sklearn import datasets
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -28,4 +31,10 @@ def handler(event, context):
     df = pd.DataFrame(data=list(range(10)))
     logger.info(df)
     logger.info(api.tsa.acf(list(range(10)), 10))
+    dataset = datasets.load_iris()
+    X = dataset.data
+    y = dataset.target
+    kmeans_model = KMeans(n_clusters=3, random_state=1).fit(X)
+    labels = kmeans_model.labels_
+    logger.info(silhouette_score(X, labels, metric='euclidean'))
     return {'yay': 'done'}

@@ -17,9 +17,11 @@ To build the zipfile, pull the Amazon Linux image and run the build script in
 it.
 
 ```
-$ docker pull amazonlinux:latest
-$ docker run -v $(pwd):/outputs -it amazonlinux:latest  /bin/bash /outputs/build.sh
+$ docker pull amazonlinux:2017.09
+$ docker run -v $(pwd):/outputs -it amazonlinux:2017.09  /bin/bash /outputs/build.sh
 ```
+
+Note that the script no longer works with the `amazonlinux:latest` image so use the one specified above `amazonlinux:2017.09`.
 
 That will make a file called `venv.zip` in the local directory that's around
 67 MB.
@@ -80,6 +82,7 @@ LICENSE.txt.
 
 ## Created Deployment Packages
 
-1. **venv-3-1-18.zip** - package for state-gen lambda function in covfefe
+1. **venv-3-1-18.zip** - package for state-gen lambda function in covfefe (numpy, scipy, requirements)
 2. **venv-4-23-18.zip** - package for auto tuner (no longer used)
-3. **venv-5-32-18.zip** - package for cycles-gen lambda function in covfefe
+3. **venv-5-32-18.zip** - package for cycles-gen lambda function in covfefe (numpy, scipy, pandas, requirements)
+4. **venv-8-2-18.zip** - package for cycles-gen lambda function in covfefe (numpy, scipy, pandas, scikit-learn, requirements)
